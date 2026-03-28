@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSkill · Browse Mentors</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../frontend/css/dashboard.css">
+</head>
+
+<body>
+    <!-- ====== NAVIGATION ====== -->
+    <nav class="dashboard-nav">
+        <div class="container">
+            <a href="./dashboard.html" class="logo">
+    <span class="logo-text">UpSkill</span>
+</a>
+
+            <div class="nav-links">
+                <a href="./dashboard.html" class="nav-link">Dashboard</a>
+                <a href="./browse.html" class="nav-link active">Browse</a>
+                <a href="./requests.html" class="nav-link">Requests</a>
+            </div>
+
+            <div class="user-actions">
+                <div class="credits-chip">
+                    <i class="fas fa-bolt"></i>
+                    <span>cr <span class="credit-amount" id="navCredits">5</span></span>
+                </div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarBtn">
+                        <div class="avatar-initials" id="avatarInitials" style="background: #7C3AED;"></div>
+                        <span class="avatar-name">
+                            <span id="navName"></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+
+                    <div class="dropdown-menu">
+                        <div class="dropdown-identity">
+                            <div class="dropdown-avatar-initials" id="dropdownInitials" style="background: #7C3AED;">
+                            </div>
+                            <div class="identity-details">
+                                <div class="identity-name" id="dropdownName"></div>
+                                <div class="identity-skills"></div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-actions">
+                            <a href="./profile.html" class="dropdown-item">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                        </div>
+
+                        <div class="dropdown-logout">
+                            <form method="POST" action="/logout" style="width:100%;">
+                                <button type="submit" class="logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> Log Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- ====== BROWSE MAIN CONTENT ====== -->
+    <main class="browse-container">
+        <!-- Page Header -->
+        <div class="browse-header">
+            <div class="header-content">
+                <h1>Find your mentor</h1>
+                <p>Browse skilled people ready to share their knowledge and skills with you.</p>
+            </div>
+        </div>
+
+        <!-- Search & Filter Bar -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name or skill...">
+            </div>
+
+            <div class="filter-wrapper">
+                <select class="filter-select" id="categorySelect">
+                    <option value="all">All Categories</option>
+                    <option value="programming">Programming</option>
+                    <option value="design">Design</option>
+                    <option value="language">Language</option>
+                    <option value="music">Music</option>
+                    <option value="business">Business</option>
+                    <option value="lifestyle">Lifestyle</option>
+                </select>
+
+                <select class="filter-select" id="sortSelect">
+                    <option value="name">Sort by Name</option>
+                    
+                </select>
+            </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="results-header">
+            <div class="results-count">
+                <span id="teachersCount">6</span> mentors available
+            </div>
+            <div class="results-filters-active" id="activeFilters"></div>
+        </div>
+
+        <!-- Teachers Table -->
+        <div class="teachers-table-container">
+            <table class="teachers-table">
+                <thead>
+                    <tr>
+                        <th>Mentor</th>
+                        <th>Skill</th>
+                        <th>Category</th>
+                        <th>Credits</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="teachersTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>No mentors found</h3>
+            <p>Try adjusting your search or filter</p>
+            <button class="clear-filters-btn" onclick="clearFilters()">
+                <i class="fas fa-times"></i> Clear Filters
+            </button>
+        </div>
+    </main>
+
+    <!-- Success Popup -->
+    <div class="popup-overlay" id="requestPopup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Request Sent!</h3>
+            <p id="popupMessage">Your request has been sent to <span id="popupTeacher"></span> for <span
+                    id="popupSkill"></span></p>
+            <div class="popup-actions">
+                <button class="popup-btn" onclick="closePopup()">OK</button>
+                <a href="./requests.html" class="popup-link">View Requests →</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

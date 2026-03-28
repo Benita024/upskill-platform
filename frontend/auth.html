@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSkill · Sign In / Sign Up</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <link rel="stylesheet" href="../frontend/css/auth.css">
+
+    
+</head>
+
+<body>
+    <div class="auth-container" id="authContainer">
+        <!-- SIGN UP PANEL (left) -->
+        <div class="form-container sign-up-container">
+            <form action="#" id="registerForm">
+                <h1>Create Account</h1>
+                <input type="text" id="regName" placeholder="Full Name" required />
+                <input type="email" id="regEmail" placeholder="Email" required />
+                <div class="password-wrapper">
+                    <input type="password" id="regPassword" placeholder="Password" required />
+                    <i class="fa-solid fa-eye toggle-password" id="toggleRegPass"></i>
+                </div>
+
+                <div class="password-wrapper">
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required />
+                    <i class="fa-solid fa-eye toggle-password" id="toggleRegConfirmPass"></i>
+                </div>
+                <div class="password-rules" id="passwordRules">
+                    Password must:
+                    <ul>
+                        <li id="ruleLength">Be at least 8 characters</li>
+                        <li id="ruleUpper">Include one uppercase letter</li>
+                        <li id="ruleLower">Include one lowercase letter</li>
+                        <li id="ruleNumber">Include one number</li>
+                    </ul>
+                </div>
+                <button type="submit" class="auth-btn">Sign Up</button>
+            </form>
+        </div>
+
+        <!-- SIGN IN PANEL (right) -->
+        <div class="form-container sign-in-container">
+            <form action="#" id="loginForm">
+                <h1>Sign In</h1>
+                <input type="email" id="loginEmail" placeholder="Email" required />
+                <div class="password-wrapper">
+                    <input type="password" id="loginPassword" placeholder="Password" required />
+                    <i class="fa-solid fa-eye toggle-password" id="toggleLoginPass"></i>
+                </div>
+                <button type="submit" class="auth-btn">Sign In</button>
+            </form>
+        </div>
+
+        <!-- OVERLAY CONTAINER (the sliding part) -->
+        <div class="overlay-container">
+            <div class="overlay">
+                <!-- LEFT OVERLAY (shown when Sign Up is active) -->
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Pick up right where you left off.</p>
+                    <button class="ghost-btn" id="signInBtn">Sign In</button>
+                </div>
+
+                <!-- RIGHT OVERLAY (shown when Sign In is active) -->
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>New here? Start your skill journey.<br><span class="credit-highlight">Get 5 free credits on
+                            signup.</span></p>
+                    <button class="ghost-btn" id="signUpBtn">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Toggle between Sign In and Sign Up
+    const signUpBtn = document.getElementById('signUpBtn');
+    const signInBtn = document.getElementById('signInBtn');
+    const authContainer = document.getElementById('authContainer');
+
+    // ===== URL MODE DETECTION =====
+
+const params = new URLSearchParams(window.location.search);
+const mode = params.get("mode");
+
+if (mode === "register") {
+    authContainer.classList.add("right-panel-active");
+} else if (mode === "login") {
+    authContainer.classList.remove("right-panel-active");
+}
+
+//  clean URL after applying mode
+window.history.replaceState({}, document.title, "auth.html");
+
+    signUpBtn.addEventListener('click', () => {
+        authContainer.classList.add('right-panel-active');
+    });
+
+    signInBtn.addEventListener('click', () => {
+        authContainer.classList.remove('right-panel-active');
+    });
+
+    const API_BASE = "http://127.0.0.1:5000";
+
+    // ===== PASSWORD VALIDATION =====
+
+    const regPasswordInput = document.getElementById("regPassword");
+    const passwordRules = document.getElementById("passwordRules");
+
+    function validatePassword(password) {
+        const lengthValid = password.length >= 8;
+        const upperValid = /[A-Z]/.test(password);
+        const lowerValid = /[a-z]/.test(password);
+        const numberValid = /[0-9]/.test(password);
+
+        toggleRule("ruleLength", lengthValid);
+        toggleRule("ruleUpper", upperValid);
+        toggleRule("ruleLower", lowerValid);
+        toggleRule("ruleNumber", numberValid);
+
+        return lengthValid && upperValid && lowerValid && numberValid;
+    }
+
+    function toggleRule(id, isValid) {
+        const el = document.getElementById(id);
+        el.classList.remove("valid", "invalid");
+        el.classList.add(isValid ? "valid" : "invalid");
+    }
+
+    // Show rules on focus
+    regPasswordInput.addEventListener("focus", function () {
+        passwordRules.classList.add("active");
+    });
+
+    // Hide rules if empty
+    regPasswordInput.addEventListener("blur", function () {
+        if (!this.value) {
+            passwordRules.classList.remove("active");
+            this.style.borderColor = "#e2e8f0";
+        }
+    });
+
+    // Live validation
+    regPasswordInput.addEventListener("input", function () {
+        const isValid = validatePassword(this.value);
+
+        if (!this.value) {
+            this.style.borderColor = "#e2e8f0";
+        } else {
+            this.style.borderColor = isValid ? "#10b981" : "#ef4444";
+        }
+    });
+
+    // ===== PASSWORD EYE TOGGLE =====
+
+    function setupPasswordToggle(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+
+        icon.addEventListener("click", function () {
+            const isPassword = input.type === "password";
+            input.type = isPassword ? "text" : "password";
+
+            icon.classList.toggle("fa-eye");
+            icon.classList.toggle("fa-eye-slash");
+        });
+    }
+
+    setupPasswordToggle("regPassword", "toggleRegPass");
+    setupPasswordToggle("regConfirmPassword", "toggleRegConfirmPass");
+    setupPasswordToggle("loginPassword", "toggleLoginPass");
+
+    // ===== REGISTER =====
+
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("regName").value.trim();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const confirmPassword = document.getElementById("regConfirmPassword").value;
+
+        if (!validatePassword(password)) {
+            alert("Password does not meet requirements.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        const response = await fetch(`${API_BASE}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+    alert(data.message + "  Please sign in.");
+
+    // Switch to Sign In panel
+    authContainer.classList.remove('right-panel-active');
+
+    // Auto-fill email in login form
+    document.getElementById("loginEmail").value = email;
+
+    //  clear register form
+    document.getElementById("registerForm").reset();
+} else {
+            alert(data.error);
+        }
+    });
+
+    // ===== LOGIN =====
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById("loginEmail").value;
+        const password = document.getElementById("loginPassword").value;
+
+        const response = await fetch(`${API_BASE}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem("user", JSON.stringify(data));
+            window.location.href = "dashboard.html";
+        } else {
+            alert(data.error);
+        }
+    });
+</script>
+</body>
+
+</html>
+
+<!-- Accounts with Passwords
+    1. sofia@gmail.com - sofia12345
+    2. rohan@gmail.com - 123456
+    3. test@gmail.com - Test@123456!
+    4. blaire@gmail.com - password123
+    5. alex@gmail.com - password456
+    6. tara@gmail.com - tara240
+    7. arjun01@gmail.com - Arjun@123
+    -->

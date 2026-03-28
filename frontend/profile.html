@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSkill · Profile</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+
+<body>
+    <!-- ====== NAVIGATION ====== -->
+    <nav class="dashboard-nav">
+        <div class="container">
+             <a href="./dashboard.html" class="logo">
+    <span class="logo-text">UpSkill</span>
+</a>
+
+            <div class="nav-links">
+                <a href="./dashboard.html" class="nav-link">Dashboard</a>
+                <a href="./browse.html" class="nav-link">Browse</a>
+                <a href="./requests.html" class="nav-link">Requests</a>
+            </div>
+
+            <div class="user-actions">
+                <div class="credits-chip">
+                    <i class="fas fa-bolt"></i>
+                    <span>cr <span class="credit-amount" id="navCredits">5</span></span>
+                </div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarBtn">
+                        <div class="avatar-initials" id="avatarInitials" style="background: #7C3AED;"></div>
+                        <span class="avatar-name">
+                            <span id="navName"></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+
+                    <div class="dropdown-menu">
+                        <div class="dropdown-identity">
+                            <div class="dropdown-avatar-initials" id="dropdownInitials" style="background: #7C3AED;">
+                            </div>
+                            <div class="identity-details">
+                                <div class="identity-name" id="dropdownName"></div>
+                                <div class="identity-skills"></div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-actions">
+                            <a href="./profile.html" class="dropdown-item">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                        </div>
+
+                        <div class="dropdown-logout">
+                            <form method="POST" action="/logout" style="width:100%;">
+                                <button type="submit" class="logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> Log Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- ====== PROFILE MAIN CONTENT ====== -->
+    <main class="profile-container">
+        <!-- Mobile Back Button -->
+        <div class="profile-back-mobile">
+            <a href="./dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Dashboard</a>
+        </div>
+
+        <!-- PROFILE HEADER CARD (Simplified - no cover) -->
+        <div class="profile-header-card">
+            <div class="profile-header-content">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar-large" id="profileAvatar"></div>
+                </div>
+
+                <div class="profile-info-section">
+                    <div class="profile-name-row">
+                        <h1 class="profile-name" id="profileName"></h1>
+                        <span class="profile-username" id="profileUsername"></span>
+                    </div>
+
+                    <div class="profile-title" id="profileTitle"></div>
+
+                    <div class="profile-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span id="memberSince"></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span id="profileLocation"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-actions-header">
+                        <button class="edit-profile-btn" onclick="openEditProfileModal()"><i class="fas fa-pen"></i>
+                            Edit Profile</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT ME SECTION -->
+        <div class="profile-section-card">
+            <div class="section-header">
+                <h2><i class="fas fa-feather-alt"></i> About Me</h2>
+                <button class="edit-btn" onclick="openEditBioModal()"><i class="fas fa-pen"></i> Edit Bio</button>
+            </div>
+            <div class="bio-content">
+                <p class="bio-text" id="profileBio">
+                    Python developer sharing coding skills. Learning guitar and Spanish.
+                    Open to skill exchanges and mentoring.
+                </p>
+            </div>
+        </div>
+        <section id="offer">
+            <!-- SKILLS OFFERING SECTION -->
+            <div class="profile-section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-bolt" style="color: #7C3AED;"></i> Skills I'm Offering</h2>
+                    <button class="add-btn" onclick="openAddSkillModal('offered')">
+                        <i class="fas fa-plus"></i> Add Skill
+                    </button>
+                </div>
+
+                <div class="skills-list" id="skillsOfferedList">
+                    <!-- Skill Card 1 -->
+                    <div class="skill-card">
+                        <div class="skill-dot" style="background: #7C3AED;"></div>
+                        <div class="skill-info">
+                            <div class="skill-header">
+                                <h3>Python Programming</h3>
+                                <span class="skill-category-badge">Programming</span>
+                            </div>
+                            <p class="skill-description">From basics to advanced - let's build something cool together!
+                            </p>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="icon-btn edit"><i class="fas fa-pen"></i></button>
+                            <button class="icon-btn delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Skill Card 2 -->
+                    <div class="skill-card">
+                        <div class="skill-dot" style="background: #F59E0B;"></div>
+                        <div class="skill-info">
+                            <div class="skill-header">
+                                <h3>Guitar Basics</h3>
+                                <span class="skill-category-badge">Music</span>
+                            </div>
+                            <p class="skill-description">Learn your first chords and strumming patterns in a fun,
+                                relaxed way.</p>
+                        </div>
+                        <div class="skill-actions">
+                            <button class="icon-btn edit"><i class="fas fa-pen"></i></button>
+                            <button class="icon-btn delete"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- SKILLS LEARNING SECTION -->
+        <div class="profile-section-card">
+            <div class="section-header">
+                <h2><i class="fas fa-graduation-cap" style="color: #059669;"></i> Skills I'm Learning</h2>
+                <button class="add-btn" onclick="openAddSkillModal('wanted')">
+                    <i class="fas fa-plus"></i> Add Skill
+                </button>
+            </div>
+
+            <div class="skills-list" id="skillsWantedList">
+                <!-- Learning Skill Card 1 -->
+                <div class="skill-card">
+                    <div class="skill-dot" style="background: #10B981;"></div>
+                    <div class="skill-info">
+                        <div class="skill-header">
+                            <h3>Spanish Conversation</h3>
+                            <span class="skill-category-badge">Language</span>
+                        </div>
+                        <p class="skill-description">Want to practice conversational Spanish and improve my fluency.</p>
+                    </div>
+                    <div class="skill-actions">
+                        <button class="icon-btn edit"><i class="fas fa-pen"></i></button>
+                        <button class="icon-btn delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+
+                <!-- Learning Skill Card 2 -->
+                <div class="skill-card">
+                    <div class="skill-dot" style="background: #EC4899;"></div>
+                    <div class="skill-info">
+                        <div class="skill-header">
+                            <h3>Cooking Basics</h3>
+                            <span class="skill-category-badge">Culinary</span>
+                        </div>
+                        <p class="skill-description">Looking to learn essential cooking techniques and expand my recipe
+                            repertoire.</p>
+                    </div>
+                    <div class="skill-actions">
+                        <button class="icon-btn edit"><i class="fas fa-pen"></i></button>
+                        <button class="icon-btn delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOUNT SETTINGS SECTION -->
+        <div class="profile-section-card">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> Account Settings</h2>
+            </div>
+
+            <div class="settings-grid">
+                <div class="setting-row">
+                    <div class="setting-label">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </div>
+                    <div class="setting-value" id="profileEmail"></div>
+                    <div class="setting-actions">
+                        <button class="setting-btn" onclick="openEmailModal()">Update</button>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <div class="setting-label">
+                        <i class="fas fa-lock"></i>
+                        <span>Password</span>
+                    </div>
+                    <div class="setting-value">•••••••••••</div>
+                    <div class="setting-actions">
+                        <button class="setting-btn" onclick="openPasswordModal()">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROFILE ACTIONS -->
+        <div class="profile-actions-bottom">
+            <a href="./dashboard.html" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </main>
+
+    <!-- ===== EDIT PROFILE MODAL ===== -->
+    <div class="popup-overlay" id="editProfileModal" style="display:none;">
+        <div class="popup-content" style="max-width:500px; text-align:left;">
+            <h3 style="margin-bottom:1rem;">Edit Profile</h3>
+
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+
+                <input type="text" id="editName" placeholder="Full Name"
+                    style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+
+                <input type="text" id="editTitle" placeholder="Title (e.g. Python Developer)"
+                    style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+
+                <input type="text" id="editLocation" placeholder="Location"
+                    style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem;">
+                <button onclick="closeEditProfileModal()" class="btn-secondary">Cancel</button>
+                <button onclick="saveProfileChanges()" class="request-btn-sm">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== EDIT BIO MODAL ===== -->
+    <div class="popup-overlay" id="editBioModal" style="display:none;">
+        <div class="popup-content" style="max-width:500px; text-align:left;">
+            <h3 style="margin-bottom:1rem;">Edit Bio</h3>
+
+            <textarea id="editBioText" rows="5" placeholder="Write something about yourself..."
+                style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+
+            <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem;">
+                <button onclick="closeEditBioModal()" class="btn-secondary">Cancel</button>
+                <button onclick="saveBioChanges()" class="request-btn-sm">Save Bio</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===== UPDATE EMAIL MODAL ===== -->
+    <div class="popup-overlay" id="updateEmailModal" style="display:none;">
+        <div class="popup-content" style="max-width:500px; text-align:left;">
+            <h3 style="margin-bottom:1rem;">Update Email</h3>
+
+            <input type="email" id="newEmailInput" placeholder="Enter new email"
+                style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd; margin-bottom:1rem;">
+
+            <div style="display:flex; justify-content:flex-end; gap:1rem;">
+                <button onclick="closeEmailModal()" class="btn-secondary">Cancel</button>
+                <button onclick="saveEmailChanges()" class="request-btn-sm">Update</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===== CHANGE PASSWORD MODAL ===== -->
+    <div class="popup-overlay" id="changePasswordModal" style="display:none;">
+        <div class="popup-content" style="max-width:500px; text-align:left;">
+            <h3 style="margin-bottom:1rem;">Change Password</h3>
+
+            <div class="password-wrapper">
+                <input type="password" id="currentPassword" placeholder="Current password" class="modal-input">
+                <i class="fa-solid fa-eye toggle-password" id="toggleCurrentPass"></i>
+            </div>
+
+            <div class="password-wrapper">
+                <input type="password" id="newPassword" placeholder="New password" class="modal-input">
+                <i class="fa-solid fa-eye toggle-password" id="toggleNewPass"></i>
+            </div>
+
+            <div class="password-wrapper">
+                <input type="password" id="confirmPassword" placeholder="Confirm new password" class="modal-input">
+                <i class="fa-solid fa-eye toggle-password" id="toggleConfirmPass"></i>
+            </div>
+
+            <div class="password-rules" id="changePasswordRules">
+                Password must:
+                <ul>
+                    <li id="changeRuleLength">Be at least 8 characters</li>
+                    <li id="changeRuleUpper">Include one uppercase letter</li>
+                    <li id="changeRuleLower">Include one lowercase letter</li>
+                    <li id="changeRuleNumber">Include one number</li>
+                </ul>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:1rem;">
+                <button onclick="closePasswordModal()" class="btn-secondary">Cancel</button>
+                <button onclick="savePasswordChanges()" class="request-btn-sm">Change</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== ADD SKILL MODAL ===== -->
+    <div class="popup-overlay" id="addSkillModal" style="display:none;">
+        <div class="popup-content" style="max-width:500px; text-align:left;">
+            <h3 style="margin-bottom:1rem;">Add New Skill</h3>
+
+            <div style="display:flex; flex-direction:column; gap:1rem;">
+
+                <input type="text" id="newSkillName" placeholder="Skill name"
+                    style="padding:10px; border-radius:8px; border:1px solid #ddd;">
+
+                <select id="newSkillCategory" class="modal-input">
+                    <option value="">Select Category</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Design">Design</option>
+                    <option value="Music">Music</option>
+                    <option value="Language">Language</option>
+                    <option value="Business">Business</option>
+                    <option value="Lifestyle">Lifestyle</option>
+                    <option value="Creative">Creative</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <textarea id="newSkillDescription" placeholder="Short description" rows="3"
+                    style="padding:10px; border-radius:8px; border:1px solid #ddd;"></textarea>
+
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:1rem; margin-top:1.5rem;">
+                <button onclick="closeAddSkillModal()" class="btn-secondary">Cancel</button>
+                <button onclick="saveNewSkill()" class="request-btn-sm">Save Skill</button>
+            </div>
+        </div>
+    </div>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>

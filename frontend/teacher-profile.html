@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UpSkill · Profile</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+
+<body>
+    <!-- ====== NAVIGATION ====== -->
+    <nav class="dashboard-nav">
+        <div class="container">
+            <a href="./dashboard.html" class="logo">
+                <span class="logo-text">UpSkill</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="./dashboard.html" class="nav-link">Dashboard</a>
+                <a href="./browse.html" class="nav-link active">Browse</a>
+                <a href="./requests.html" class="nav-link">Requests</a>
+            </div>
+
+            <div class="user-actions">
+                <div class="credits-chip">
+                    <i class="fas fa-bolt"></i>
+                    <span>cr <span class="credit-amount" id="navCredits">5</span></span>
+                </div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <button class="avatar-btn" id="avatarBtn">
+                        <div class="avatar-initials" id="avatarInitials" style="background: #7C3AED;"></div>
+                        <span class="avatar-name">
+                            <span id="navName"></span>
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
+                    </button>
+
+                    <div class="dropdown-menu">
+                        <div class="dropdown-identity">
+                            <div class="dropdown-avatar-initials" id="dropdownInitials" style="background: #7C3AED;"></div>
+                            <div class="identity-details">
+                                <div class="identity-name" id="dropdownName"></div>
+                                <div class="identity-skills"></div>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-actions">
+                            <a href="./profile.html" class="dropdown-item">
+                                <i class="fas fa-eye"></i> View Profile
+                            </a>
+                        </div>
+
+                        <div class="dropdown-logout">
+                            <form method="POST" action="/logout" style="width:100%;">
+                                <button type="submit" class="logout-btn">
+                                    <i class="fas fa-sign-out-alt"></i> Log Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ====== TEACHER PROFILE MAIN CONTENT ====== -->
+    <!-- ====== TEACHER PROFILE MAIN CONTENT ====== -->
+    <main class="profile-container">
+        <!-- Back to Browse -->
+        <div class="back-nav">
+            <a href="./browse.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Browse
+            </a>
+        </div>
+
+        <!-- Profile Header Card -->
+        <div class="profile-header-card" id="profileHeader">
+            <div class="profile-avatar-section">
+                <div class="profile-avatar-large" id="teacherAvatar" style="background: #7C3AED;">MA</div>
+            </div>
+
+            <div class="profile-info-section">
+                <div class="profile-name-row">
+                    <h1 class="profile-name" id="teacherName">Maria</h1>
+                    <span class="profile-username" id="teacherUsername">@maria</span>
+                </div>
+
+                <div class="profile-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span id="teacherMember">Member since Jan 2024</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="teacherLocation">San Francisco</span>
+                    </div>
+                </div>
+
+                <!-- Request Button -->
+                <button class="request-teacher-btn" id="requestTeacherBtn">
+                    <i class="fas fa-paper-plane"></i> Request to Learn from <span id="requestTeacherName">Maria</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bio Section -->
+        <div class="profile-section-card">
+            <div class="section-header">
+                <h2><i class="fas fa-feather-alt"></i> Bio</h2>
+            </div>
+            <div class="bio-content">
+                <p class="bio-text" id="teacherBio">
+                    Python developer with 5 years experience. Love teaching beginners and making coding fun!
+                    Available on weekends and evenings.
+                </p>
+            </div>
+        </div>
+
+        <!-- Skills Offered Section -->
+        <div class="profile-section-card">
+            <div class="section-header">
+                <h2><i class="fas fa-bolt" style="color: #7C3AED;"></i> Skills Offered</h2>
+            </div>
+
+            <div class="skills-list" id="skillsList">
+                <!-- Skills will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Note: This is a read-only profile -->
+        <div class="profile-note">
+            <i class="fas fa-info-circle"></i>
+            <span>You're viewing a teacher's public profile</span>
+        </div>
+    </main>
+
+    <!-- Success Popup (hidden by default) -->
+    <div class="popup-overlay" id="requestPopup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>Request Sent!</h3>
+            <p id="popupMessage">Your request has been sent to <span id="popupTeacher"></span></p>
+            <div class="popup-actions">
+                <button class="popup-btn" onclick="closePopup()">OK</button>
+                <a href="./requests.html" class="popup-link">View Requests →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async function () {
+
+            const currentUser = JSON.parse(localStorage.getItem("user"));
+            const urlParams = new URLSearchParams(window.location.search);
+            const teacherId = urlParams.get("id");
+
+            if (!teacherId) {
+                alert("No teacher selected.");
+                return;
+            }
+
+            try {
+                const res = await fetch(`http://127.0.0.1:5000/user/${teacherId}`);
+                const teacher = await res.json();
+
+                document.getElementById("teacherName").innerText = teacher.name;
+                document.getElementById("teacherUsername").innerText = `@${teacher.username}`;
+                document.getElementById("teacherLocation").innerText = teacher.location;
+                document.getElementById("teacherBio").innerText = teacher.bio;
+                document.getElementById("requestTeacherName").innerText = teacher.name;
+
+                // Avatar initials
+                const initials = teacher.name
+                    .split(" ")
+                    .map(w => w[0])
+                    .join("")
+                    .toUpperCase();
+
+                document.getElementById("teacherAvatar").innerText = initials;
+
+                // Render skills
+                const skillsList = document.getElementById("skillsList");
+                skillsList.innerHTML = "";
+
+                teacher.skills_offered.forEach(skill => {
+                    const skillDiv = document.createElement("div");
+                    skillDiv.className = "skill-item";
+                    skillDiv.innerHTML = `
+                <div class="skill-details">
+                    <span class="skill-name">${skill.name}</span>
+                    <span class="skill-cost">
+                        <i class="fas fa-bolt"></i> 1 credit
+                    </span>
+                </div>
+            `;
+                    skillsList.appendChild(skillDiv);
+                });
+
+                // Request button
+                document.getElementById("requestTeacherBtn")
+                    .addEventListener("click", async function () {
+
+                        await fetch("http://127.0.0.1:5000/create-request", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                from_user_id: currentUser.id,
+                                to_user_id: teacher.id,
+                                skill: teacher.skills_offered[0].name,
+                                skill_category: teacher.skills_offered[0].category,
+                                message: "I'd like to learn this skill."
+                            })
+                        });
+
+                        alert("Request sent successfully!");
+                    });
+
+            } catch (err) {
+                console.error(err);
+                alert("Error loading teacher.");
+            }
+
+        });
+    </script>
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
